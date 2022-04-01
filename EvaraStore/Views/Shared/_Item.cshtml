@@ -1,0 +1,51 @@
+﻿@model TbItem
+
+    <div class="box">
+        <div class="ajaxbg d-none">
+            <img src="~/images/giphy.gif" />
+            <p class="lead alert alert-success text-center d-none">
+                The Product has been Added
+            </p>
+        </div>
+        <div class="image-box">
+            @if (Model.Discount != null)
+            {
+                <div class="persentage">@Model.Discount%</div>
+            }
+            <a asp-controller="Item" asp-action="SingleItem" asp-route-id="@Model.ItemId">
+                <img src="@string.Format("/Uploads/{0}", Model.TbImages.FirstOrDefault().ImageName)" alt="">
+            </a>
+        </div>
+        <div class="info-box">
+            <a asp-controller="Item" asp-action="AddToCart" asp-route-Id="@Model.ItemId" data-id="@Model.ItemId" class="cart">
+                <div class="content">
+                    <i class='bx bx-shopping-bag'></i>
+                </div>
+            </a>
+            <div class="category">
+                <a asp-controller="Shop" asp-action="Category" asp-route-id="@Model.Category.CategoryName">@Model.Category.CategoryName</a>
+                <span>-</span>
+                <a asp-controller="Shop" asp-action="SubCategory" asp-route-id="@Model.Category.CategoryName--@Model.SubCategory.SubCategoryName">@Model.SubCategory.SubCategoryName</a>
+            </div>
+            <a asp-controller="Item" asp-action="SingleItem" asp-route-id="@Model.ItemId" class="Name">@Model.ItemName</a>
+            <div class="rating">
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <span>90%</span>
+            </div>
+            <div class="price">
+                @if (Model.Discount != null)
+                {
+                    <span class="new-price">@Model.OldPrice.ToString("C2")</span>
+                    <span class="old-price">@Model.SalesPrice.ToString("C2")</span>
+                }
+                else
+                {
+                    <span class="new-price">@Model.SalesPrice.ToString("C2")</span>
+                }
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,33 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800",
+      "https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,600,600i,700,700i,800",
+      "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
+      "wwwroot/vendor/bootstrap/bootstrap.css",
+      "wwwroot/vendor/fontawesome/all.css",
+      "wwwroot/vendor/boxicons/css/boxicons.min.css",
+      "wwwroot/vendor/owl.carousel/owl.carousel.min.css",
+      "wwwroot/vendor/slick/slick.css",
+      "wwwroot/vendor/swiper/swiper.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/vendor/jquery/jquery.min.js",
+      "wwwroot/vendor/bootstrap/popper.min.js",
+      "wwwroot/vendor/bootstrap/bootstrap.js",
+      "wwwroot/vendor/owl.carousel/owl.carousel.min.js",
+      "wwwroot/vendor/fontawesome/all.min.js",
+      "wwwroot/vendor/slick/slick.min.js",
+      "wwwroot/vendor/swiper/swiper.min.js"
+    ],
+    "minify": {
+      "enable": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

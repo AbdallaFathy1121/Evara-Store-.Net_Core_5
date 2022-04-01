@@ -1,0 +1,98 @@
+﻿@model Login
+
+@{
+    Layout = null;
+}
+
+
+<html lang="en">
+<head>
+
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Vendor Css Files -->
+    <link rel="stylesheet" href="~/vendor/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="~/vendor/fontawesome/all.css">
+    <link rel="stylesheet" href="~/vendor/boxicons/css/boxicons.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/icon.png">
+
+    <!-- Main Css File -->
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/login-register.css">
+
+    <title>Evara - Login</title>
+
+    <style>
+        .alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+    </style>
+
+</head>
+<body>
+
+    @if (TempData["Errors"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="container">
+                <strong>@TempData["Errors"]</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+
+    <div id="particles-js"></div>
+
+    <!-- ------------------------------------------------------------------------------ -->
+    <!-- Start Login -->
+    <div class="login">
+        <div class="image-box">
+            <img src="~/images/logo.svg" alt="">
+        </div>
+        <h4 class=" text-center">Login</h4>
+        <br>
+        <form asp-action="FormLogin">
+
+            <input type="hidden" asp-for="ReturnUrl" />
+
+            <div class="form-group">
+                <img src="~/images/form/email.png" alt="">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" asp-for="Email" required>
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <img src="~/images/form/password.png" alt="">
+                <label for="exampleInputPassword1">Password</label>
+                <input asp-for="Password" type="password" class="form-control" id="exampleInputPassword1" required>
+            </div>
+            <button type="submit" class="btn submit mt-3">Submit</button>
+        </form>
+        <div class="sign-up mt-4 text-center">
+            <a asp-controller="Users" asp-action="Register">Create an Account <i class="fas fa-long-arrow-alt-right ml-2"></i></a>
+        </div>
+    </div>
+    <!-- End Login -->
+    <!-- ------------------------------------------------------------------------------ -->
+    <!-- --------------------------------------------------------------------------- -->
+    <!-- Vendor Js Files -->
+    <script src="~/vendor/particles.js"></script>
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/popper.min.js"></script>
+    <script src="~/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/vendor/fontawesome/all.min.js"></script>
+
+    <!-- Main Js Files -->
+    <script src="~/js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,124 @@
+﻿@model TbSetting
+
+@section Styles {
+    <style>
+        .alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+    </style>
+}
+
+
+<!-- Notefication -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="container">
+            <strong>@TempData["Success"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Manage Website Settings</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Website Settings</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Settings</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-controller="Setting" asp-action="Save" method="post" role="form">
+                        <div class="card-body">
+
+                            <input type="hidden" asp-for="SettingId" />
+
+                            @*Main Phone*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Main Phone</label>
+                                <input asp-for="MainPhone" type="number" class="form-control" id="exampleInputEmail1" required />
+                            </div>
+
+                            @*HotLine Phone*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail2">HotLine Phone</label>
+                                <input asp-for="HotLinePhone" type="number" class="form-control" id="exampleInputEmail2" required />
+                            </div>
+
+                            @*Address*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail3">Address</label>
+                                <input asp-for="Address" type="text" class="form-control" id="exampleInputEmail3" required />
+                            </div>
+
+                            @*Facebook*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail4">Facebook link</label>
+                                <input asp-for="Facebook" type="text" class="form-control" id="exampleInputEmail4" required />
+                            </div>
+
+                            @*Instagram*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail5">Instagram Link</label>
+                                <input asp-for="Insatgram" type="text" class="form-control" id="exampleInputEmail5" required />
+                            </div>
+
+                            @*Address*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail6">Pinterest link</label>
+                                <input asp-for="Pinterest" type="text" class="form-control" id="exampleInputEmail6" required />
+                            </div>
+
+                            @*Twitter*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail7">Twitter link</label>
+                                <input asp-for="Twitter" type="text" class="form-control" id="exampleInputEmail7" required />
+                            </div>
+
+                            @*YouTube*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail8">YouTube Link</label>
+                                <input asp-for="YouTube" type="text" class="form-control" id="exampleInputEmail8" required />
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn-lg btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+

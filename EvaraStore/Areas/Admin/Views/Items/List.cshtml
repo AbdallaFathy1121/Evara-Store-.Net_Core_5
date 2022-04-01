@@ -1,0 +1,105 @@
+﻿
+@model ListItemModel
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Products</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Products</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <a asp-controller="Items" asp-action="Edit" class="btn-lg btn-success">Add New Products +</a>
+                    </div>
+                    <div class="card-body">
+                        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" role="grid" aria-describedby="example1_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">
+                                                    Item Name
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">
+                                                    Image
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                                                    Price
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                                                    Discount
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                                                    Category
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                                                    Creation Date
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">
+                                                    Stock
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.lstItems)
+                                            {
+                                            <tr class="odd">
+                                                <td class="dtr-control sorting_1" tabindex="0">@item.ItemName</td>
+                                                <td>
+                                                    @foreach (var image in item.TbImages)
+                                                    {
+                                                        <img style="border-radius: 2px;" width="50" height="50" src="@string.Format("/Uploads/{0}", image.ImageName)" />
+                                                    }
+                                                </td>
+                                                <td>@item.OldPrice.ToString("C2")</td>
+                                                @if (item.Discount != null)
+                                                {
+                                                    <td>@item.Discount%</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@item.Discount</td>
+                                                }
+                                                <td>@item.Category.CategoryName - @item.SubCategory.SubCategoryName</td>
+                                                <td>@item.CreationDate</td>
+                                                <td>@item.Stock</td>
+                                                <td>
+                                                    <a asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-info">Edit</a>
+                                                    <a asp-action="Delete" asp-route-item="@item.ItemId" class="btn btn-danger">Delete</a>
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>

@@ -1,0 +1,93 @@
+﻿@model TbOrder
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Order</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Edit Order</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-controller="Order" asp-action="Save" method="post" role="form">
+                        <div class="card-body">
+
+                            <input type="hidden" asp-for="OrderId" />
+                            <input type="hidden" asp-for="BillingId" />
+                            <input type="hidden" asp-for="Date" />
+
+                            @*Serial Number*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Serial Number</label>
+                                <input asp-for="SerialNumber" type="text" class="form-control" id="exampleInputEmail1" readonly />
+                            </div>
+
+                            @*Customer Name*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Customer Name</label>
+                                <input value="@Model.Billing.FullName" type="text" class="form-control" id="exampleInputEmail1" readonly />
+                            </div>
+
+                            @*Item Qty*@
+                            <div class="form-group">
+                                <label for="Stock">Item Qty</label>
+                                <input value="@Model.TbOrderItems.Count()" type="number" class="form-control" id="Stock" readonly />
+                            </div>
+
+                            @*Total Price*@
+                            <div class="form-group">
+                                <label for="Stock">Total Price</label>
+                                <input asp-for="Total" type="number" class="form-control" id="Stock" readonly />
+                            </div>
+
+                            @*Status Order*@
+                            <div class="form-group">
+                                <label for="select">Status Order</label>
+                                <select asp-for="Status" id="select" name="status" class="form-control">
+                                    <option value="Processing">Processing</option>
+                                    <option value="In Delivery">In Delivery</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+
+                            @*Note*@
+                            <div class="form-group">
+                                <label for="inputMessage">Description</label>
+                                <textarea value="@Model.Billing.Note" id="inputMessage" class="form-control" rows="4" readonly></textarea>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn-lg btn-success">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+

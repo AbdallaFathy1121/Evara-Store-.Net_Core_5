@@ -1,0 +1,380 @@
+﻿@model SinglePageModel
+@inject SignInManager<AppUser> SignInManager
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/single-product.css">
+    <style>
+        .ajaxbg {
+            background: rgba(255,255,255,0.8) !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 22 !important;
+            border-radius: 50px;
+        }
+
+            .ajaxbg img {
+                position: absolute !important;
+                top: 29% !important;
+                left: 50% !important;
+                width: 80px !important;
+                height: 80px !important;
+                transform: translateX(-50%) !important;
+                z-index: 23 !important;
+            }
+
+            .ajaxbg p {
+                position: absolute;
+                top: 29%;
+                left: 0;
+                width: 100% !important;
+                z-index: 23;
+            }
+
+        .product .right .add {
+            position: relative !important;
+        }
+
+        .ajaxbg img {
+            width: 66%;
+            margin-top: -4px;
+        }
+        .alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+    </style>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="container">
+            <strong>@TempData["Success"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+@if (TempData["Errors"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="container">
+            <strong>@TempData["Errors"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start Breadcrumb -->
+<div class="breadcrumb">
+    <div class="container d-flex">
+        <li>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <i class="fas fa-angle-right"></i>
+        <li>
+            <a asp-controller="Shop" asp-action="Category" asp-route-id="@Model.Item.Category.CategoryName">@Model.Item.Category.CategoryName</a>
+        </li>
+        <i class="fas fa-angle-right"></i>
+        <li>
+            <a asp-controller="Item" asp-action="SingleItem" asp-route-id="@Model.Item.ItemId">@Model.Item.ItemName</a>
+        </li>
+    </div>
+</div>
+<!-- End Breadcrumb -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start Product -->
+<div class="product pt-4 pb-4">
+    <div class="container">
+        <div class="row mb-5">
+
+            <!-- Start Left Side -->
+            <div class="col-lg-6 col-md-6">
+                <div class="left">
+                    <div class="slider slider-single">
+                        @foreach (var image in Model.Item.TbImages)
+                        {
+                            <div class="item">
+                                <img class="w-100" src="@string.Format("/Uploads/{0}", image.ImageName)" alt="">
+                            </div>
+                        }
+                    </div>
+                    <div class="slider slider-nav">
+                        @foreach (var image in Model.Item.TbImages)
+                        {
+                            <div class="item">
+                                <img class="w-100" src="@string.Format("/Uploads/{0}", image.ImageName)" alt="">
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- End Left Side -->
+            <!-- Start Right Side -->
+            <div class="col-lg-6 col-md-6 mt-lg-0 mt-md-0 mt-sm-4 mt-4">
+                <div class="right">
+                    <h1 class="mb-0">@Model.Item.ItemName</h1>
+                    <div class="d-flex align-items-center pt-3">
+                        <div class="left text-left">
+                            <strong>Category:</strong> @Model.Item.Category.CategoryName - @Model.Item.SubCategory.SubCategoryName
+                        </div>
+                        <div class="right text-right ml-auto">
+                            <div class="rating">
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span>(@Model.Item.TbRate.Count reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="price pt-1 pb-1 d-flex align-items-center">
+                        @if (Model.Item.Discount != null)
+                        {
+                            <span class="new mr-3">@Model.Item.OldPrice.ToString("C2")</span>
+                            <span class="old mr-3">@Model.Item.SalesPrice.ToString("C2")</span>
+                            <span class="persentage">@Model.Item.Discount% Off</span>
+                        }
+                        else
+                        {
+                            <span class="new mr-3">@Model.Item.OldPrice.ToString("C2")</span>
+                        }
+                    </div>
+                    <hr>
+                    <div class="description pt-1 pb-1">
+                        @Model.Item.Description
+                    </div>
+                    <ul class="pt-4 pb-4 mb-0">
+                        <li><i class='bx bx-sync mr-2'></i> 30 Day Return Policy</li>
+                        <li><i class='bx bx-credit-card mr-2'></i> Cash on Delivery available</li>
+                    </ul>
+                    <div class="d-flex align-items-center mt-4 mb-5">
+                        <a asp-controller="Item" asp-action="AddToCart" asp-route-Id="@Model.Item.ItemId" data-id="@Model.Item.ItemId" class="add mr-2 ml-2">
+                            Add to Cart
+                        </a>
+                        <button class="heart ajaxbg d-none"><img src="~/images/giphy.gif" /></button>
+                        <button class="heart"><i class='bx bx-heart'></i></button>
+                    </div>
+                    <hr>
+                    <div class="stock mt-4">Availability: <span>@Model.Item.Stock Items In Stock</span></div>
+                </div>
+            </div>
+            <!-- End Right Side -->
+
+        </div>
+
+        <!-- Start Delivery -->
+        <div class="delivery content mb-5">
+            <div class="title">Packaging & Delivery</div>
+            <p>
+                Less lion goodness that euphemistically robin expeditiously bluebird smugly scratched far while thus cackled sheepishly rigid after due one assenting regarding censorious while occasional or this more crane went more as this less much amid overhung anathematic because much held one exuberantly sheep goodness so where rat wry well concomitantly.
+                <br>
+                <br>
+                Scallop or far crud plain remarkably far by thus far iguana lewd precociously and and less rattlesnake contrary caustic wow this near alas and next and pled the yikes articulate about as less cackled dalmatian in much less well jeering for the thanks blindly sentimental whimpered less across objectively fanciful grimaced wildly some wow and rose jeepers outgrew lugubrious luridly irrationally attractively dachshund.
+            </p>
+        </div>
+        <!-- End Delivery -->
+        <!-- Start Add-review -->
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div class="add-review content mb-5">
+                <div class="title">Add a review</div>
+                <form asp-controller="Item" asp-action="Rating" method="post" role="form">
+                    <input asp-for="Rate.Id" value="0" type="hidden" />
+                    <input asp-for="Rate.ItemId" value="@Model.Item.ItemId" type="hidden" />
+                    <div class="textbox mb-3 mt-4 ">
+                        <textarea asp-for="Rate.Comment" placeholder="Write Comment" class="w-100 h-100"></textarea>
+                    </div>
+                    <input asp-for="Rate.Star" type="number" class="mr-2 mb-3 number" min="1" max="5" required>
+                    <span>Star</span>
+                    <div class="submit">
+                        <button type="submit">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        }
+        <!-- End Add-review -->
+        <!-- Start Reviews -->
+        <div class="reviews content mb-5">
+            <div class="title">Reviews (@Model.Item.TbRate.Count)</div>
+            <div class="row mt-3 mb-5">
+
+                <!-- Start Left Side -->
+                @if (Model.Item.TbRate.Count != 0)
+                {
+                    <div class="col-lg-8 mb-lg-0 mb-5">
+                        <div class="left">
+                            <div class="sub-title mt-4 mb-4">Customer Comments</div>
+
+                            @foreach (var rate in Model.Item.TbRate)
+                            {
+                                <div class="row d-flex pt-3 pb-3 align-items-center">
+                                    <div class="left mr-3">
+                                        <div>
+                                            <img src="~/images/Profile/avatar-6.jpg" alt="">
+                                            <h6 class="name mb-0 text-center mt-2">@rate.UserName</h6>
+                                        </div>
+                                    </div>
+                                    <div class="right">
+                                        <div class="rating">
+                                            <div class="rating">
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                                <span class="ml-2">( @rate.Star Star )</span>
+                                            </div>
+                                        </div>
+                                        <div class="comment mt-2 mb-2">
+                                            @rate.Comment
+                                        </div>
+                                        <div class="date">
+                                            @rate.CreationDate
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-8 mb-lg-0 mb-5">
+                        <div class="left">
+                            <div class="sub-title mt-4 mb-4">Customer Comments</div>
+                            <div class="display-1">No Rating</div>
+                        </div>
+                    </div>
+                }
+                <!-- End Left Side -->
+                <!-- Start Right Side -->
+                <div class="col-lg-3">
+                    <div class="right left">
+                        <div class="sub-title mb-4">Customer Reviews</div>
+
+                        <div class="rating mt-3 mb-4">
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span class="ml-2">@TempData["TotalRate"]%</span>
+                        </div>
+
+                        <div class="progress w-100 d-flex align-items-center">
+                            <span>5 Star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                        </div>
+                        <div class="progress w-100 d-flex align-items-center">
+                            <span>4 Star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</div>
+                        </div>
+                        <div class="progress w-100 d-flex align-items-center">
+                            <span>3 Star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%</div>
+                        </div>
+                        <div class="progress w-100 d-flex align-items-center">
+                            <span>2 Star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">10%</div>
+                        </div>
+                        <div class="progress w-100 d-flex align-items-center">
+                            <span>1 Star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 5%;" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">5%</div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End Right Side -->
+
+            </div>
+        </div>
+        <!-- End Reviews -->
+
+    </div>
+</div>
+<!-- End Product -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start Related-product -->
+<div class="related-product best-sell categories new-added">
+    <div class="container">
+        <div class="title">
+            <span>Related</span> products
+        </div>
+        <div id="slider" class="slider row">
+            @foreach (var item in Model.LstRelatedItems)
+            {
+                <div class="item">
+                    <partial name="_Item" model="item" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- End Related-product -->
+<!-- ------------------------------------------------------------------------------ -->
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(".add").click(function (e) {
+                e.preventDefault();
+
+                let id = $(this).data("id");
+                let ajaxDiv = $(this).parent().find(".ajaxbg");
+                ajaxDiv.removeClass("d-none");
+
+                $.get('/Item/AddToCart/' + id, {}, function (data) {
+                    $(".cart-bag").html(data);
+                    ajaxDiv.find("img").addClass("d-none");
+                    setTimeout(() => {
+                        ajaxDiv.animate({ opacity: 0 }, function () {
+                            $(this).addClass("d-none").fadeTo(.1, 1);
+                            $(this).find("img").removeClass("d-none");
+                        });
+                    });
+                });
+            });
+        });
+        $(function () {
+            $("a.cart").click(function (e) {
+                e.preventDefault();
+
+                let id = $(this).data("id");
+                let ajaxDiv = $(this).parent().parent().find("div.ajaxbg");
+                ajaxDiv.removeClass("d-none");
+                $.get('/Item/AddToCart/' + id, {}, function (data) {
+                    $(".cart-bag").html(data);
+                    ajaxDiv.find("img").addClass("d-none");
+                    ajaxDiv.find("p").removeClass("d-none");
+                    setTimeout(() => {
+                        ajaxDiv.animate({ opacity: 0 }, function () {
+                            $(this).addClass("d-none").fadeTo(.1, 1);
+                            $(this).find("img").removeClass("d-none"); +
+                                $(this).find("p").addClass("d-none");
+                        });
+                    });
+                });
+            });
+        });
+
+    </script>
+}
+
+

@@ -1,0 +1,12 @@
+﻿@model CartViewModel
+
+@if (Model != null)
+{
+    <i class="bx bx-shopping-bag"></i>
+    <div class="number">@Model.NumberOfItems</div>
+}
+else
+{
+    <i class="bx bx-shopping-bag"></i>
+    <div class="number">0</div>
+}

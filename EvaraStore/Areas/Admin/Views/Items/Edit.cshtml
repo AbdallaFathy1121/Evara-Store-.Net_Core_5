@@ -1,0 +1,151 @@
+﻿
+@model TbItem
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Form</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Item Form</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Add & Edit</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-controller="Items" asp-action="Save" method="post" enctype="multipart/form-data" role="form">
+                        <div class="card-body">
+
+
+                            @if (Model == null)
+                            {
+                                <input type="hidden" value="0" asp-for="ItemId" />
+
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="ItemId" />
+
+                            }
+
+                            @*Item Name*@
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Item Name</label>
+                                <input asp-for="ItemName" type="text" class="form-control" id="exampleInputEmail1" required />
+                                <span class="text-danger" asp-validation-for="ItemName"></span>
+                            </div>
+
+                            @*Select Category*@
+                            <div class="form-group">
+                                <label for="select">Category</label>
+                                <select id="select" class="form-control" asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "CategoryId","CategoryName"))">
+                                </select>
+                                <span class="text-danger" asp-validation-for="CategoryId"></span>
+                            </div>
+
+                            @*Select SubCategory*@
+                            <div class="form-group">
+                                <label for="select">SubCategory</label>
+                                <select id="select" class="form-control" asp-for="SubCategoryId" asp-items="@(new SelectList(ViewBag.SubCategories, "SubCategoryId","SubCategoryName"))">
+                                </select>
+                                <span class="text-danger" asp-validation-for="SubCategoryId"></span>
+                            </div>
+
+                            @*SalesPrice*@
+                            <div class="form-group">
+                                <label for="SalesPrice">Sales Price</label>
+                                <input asp-for="SalesPrice" type="number" step="any" required class="form-control" id="SalesPrice" onkeyup="ChangeDiscount(this);" onchange="ChangeDiscount(this);" />
+                                <span class="text-danger" asp-validation-for="SalesPrice"></span>
+                            </div>
+
+                            @*NewPrice. this Added Automatic only*@
+                            <div class="form-group" hidden>
+                                <label for="NewPrice">New Price</label>
+                                <input asp-for="OldPrice" type="number" step="any" class="form-control" id="NewPrice" />
+                                <span class="text-danger" asp-validation-for="OldPrice"></span>
+                            </div>
+
+                            @*Discount*@
+                            <div class="form-group">
+                                <label for="Discount">Discount (By Percent)</label>
+                                <input asp-for="Discount" type="number" step="any" min="0" max="100" class="form-control" id="Discount" onkeyup="ChangeDiscount(this);" />
+                                <span class="text-danger" asp-validation-for="Discount"></span>
+                            </div>
+
+                            @*Stock*@
+                            <div class="form-group">
+                                <label for="Stock">Stock</label>
+                                <input asp-for="Stock" type="number" class="form-control" id="Stock" required />
+                                <span class="text-danger" asp-validation-for="Stock"></span>
+                            </div>
+
+                            @*Choose Images*@
+                            <div class="form-group">
+                                <label for="exampleInputFile">Select Images</label>
+                                <div class="input-group">
+                                    <input type="file" name="Files" multiple="multiple" class="form-control" id="inputGroupFile02" required>
+                                    <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                                </div>
+                            </div>
+
+                            @*Description*@
+                            <div class="form-group">
+                                <label for="inputMessage">Description</label>
+                                <textarea asp-for="Description" id="inputMessage" class="form-control" rows="4" required></textarea>
+                            </div>
+
+                            <input class="dateTime" type="datetime" asp-for="CreationDate"  hidden/>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn-lg btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+@section Script
+{
+    <script>
+
+        function ChangeDiscount(input) {
+
+            let dicount = parseFloat($("#Discount").val());
+            let salesPrice = parseFloat($("#SalesPrice").val());
+
+            if (dicount > 0 && dicount <= 100) {
+                let NewPrice = salesPrice - ((dicount / 100) * salesPrice);
+                $("#NewPrice").val(NewPrice);
+            }
+            else {
+                $("#NewPrice").val(salesPrice);
+            }
+
+        }
+
+    </script>
+}

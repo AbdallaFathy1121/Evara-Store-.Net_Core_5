@@ -1,0 +1,211 @@
+﻿@model CheckoutModel
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/checkout.css">
+    <style>
+        .alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+    </style>
+}
+
+
+@if (TempData["UpdateUser"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="container">
+            <strong>@TempData["UpdateUser"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+@if (TempData["Errors"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="container">
+            <strong>@TempData["Errors"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start Breadcrumb -->
+<div class="breadcrumb">
+    <div class="container d-flex">
+        <li>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <i class="fas fa-angle-right"></i>
+        <li>
+            <a asp-controller="Order" asp-action="Cart">Your Cart</a>
+        </li>
+        <i class="fas fa-angle-right"></i>
+        <li>
+            <a asp-controller="Checkout" asp-action="Index">Checkout</a>
+        </li>
+    </div>
+</div>
+<!-- End Breadcrumb -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start CheckOut -->
+<div class="checkout mb-5 mt-5">
+    <div class="container">
+        <form asp-controller="Checkout" asp-action="PlaceOrder" method="post">
+            <div class="row">
+
+                <!-- Start Left Section -->
+                <div class="col-lg-6 mb-lg-0 mb-4">
+                    <div class="left">
+                        <div class="title mb-4">
+                            <img src="~/images/form/form.png" alt="">
+                            Billing Details
+                        </div>
+                        @if(Model.Billing == null)
+                        {
+                            <input asp-for="Billing.Id" value="0" type="hidden" />
+                        }
+                        else
+                        {
+                            <input asp-for="Billing.Id" type="hidden" />
+                        }
+                        <div class="form-group">
+                            <img src="~/images/form/name.png" alt="">
+                            <input asp-for="Billing.FullName" type="text" class="form-control" placeholder="Full Name *" required>
+                        </div>
+                        <div class="form-group">
+                            <img src="~/images/form/phone.png" alt="">
+                            <input asp-for="Billing.Phone1" type="number" class="form-control" placeholder="Your Phone (1) *" required>
+                        </div>
+                        <div class="form-group">
+                            <img src="~/images/form/phone.png" alt="">
+                            <input asp-for="Billing.Phone2" type="number" class="form-control" placeholder="Your Phone (2)">
+                        </div>
+                        <div class="row pl-0 pr-0">
+                            <div class="col-md-6 pl-0 pr-lg-2 pr-md-2 pr-sm-0 pr-0">
+                                <div class="form-group">
+                                    <img src="~/images/form/country.png" alt="">
+                                    <input asp-for="Billing.Country" type="text" class="form-control" placeholder="Your Country *" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pr-0 pl-lg-2 pl-md-2 pl-sm-0 pl-0">
+                                <div class="form-group">
+                                    <img src="~/images/form/city.png" alt="">
+                                    <input asp-for="Billing.City" type="text" class="form-control" placeholder="Your City *" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <img src="~/images/form/code-zip.png" alt="">
+                            <input asp-for="Billing.Zip" type="text" class="form-control" placeholder="Postcode / Zip *" required>
+                        </div>
+                        <div class="form-group">
+                            <img src="~/images/form/address.png" alt="">
+                            <input asp-for="Billing.Address" type="text" class="form-control" placeholder="Your Address *" required>
+                        </div>
+                        <div class="form-group notes">
+                            <textarea asp-for="Billing.Note" class="form-control" rows="6" placeholder="Order Notes ..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Left Section -->
+                <!-- Start Right Section -->
+                <div class="col-lg-6">
+                    <div class="right">
+                        <div class="title mb-4">
+                            <img src="~/images/form/orders.png" alt="">
+                            Your Orders
+                        </div>
+
+                        <!-- Start Table -->
+                        <div class="table-responsive-md mb-4">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Product</th>
+                                        <th scope="col">total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Cart == null)
+                                    {
+                                        <tr><td class="text-danger">Not Found Products, Please Add Products in Cart and Try Again</td></tr>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var item in Model.Cart.lstItems)
+                                        {
+                                            <tr>
+                                                <td><img src="@string.Format("/Uploads/{0}", item.ImageName)" alt=""></td>
+                                                <td class="name">
+                                                    @item.ItemName
+                                                    <p>x @item.Qty</p>
+                                                </td>
+                                                <td class="price">@item.Total.ToString("C2")</td>
+                                            </tr>
+                                        }
+
+                                        <!-- Strat Total -->
+                                        <tr>
+                                            <td colspan="1">
+                                                Total
+                                            </td>
+                                            <td colspan="2" class="total-price">
+                                                <span>@Model.Cart.total.ToString("C2")</span> + Shipping Expenses
+                                            </td>
+                                        </tr>
+                                        <!-- End Total -->
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End Table -->
+                        <!-- Start Payment -->
+                        <div class="payment">
+                            <div class="title mb-3">
+                                <img src="~/images/form/payment.png" alt="">
+                                Payment
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="method" id="Cach" checked>
+                                <label class="form-check-label" for="Cach">
+                                    Cash
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="method" id="paypal">
+                                <label class="form-check-label" for="paypal">
+                                    Paypal
+                                </label>
+                            </div>
+                        </div>
+                        <!-- End Payment -->
+                        <!-- Start Submit -->
+                        @if (Model.Cart != null)
+                        {
+                            <button type="submit" class="submit mt-4">
+                                Place Order
+                            </button>
+                        }
+                        <!-- End Submit -->
+
+                    </div>
+                </div>
+                <!-- End Right Section -->
+
+            </div>
+        </form>
+    </div>
+</div>
+<!-- End CheckOut -->
+<!-- ------------------------------------------------------------------------------ -->

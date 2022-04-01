@@ -1,0 +1,149 @@
+﻿@model ShoppingCart
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cart.css">
+    <style>
+        .increment {
+            color: #fff !important;
+            background-color: #28a745;
+            padding: 5px 9px;
+            border-radius: 4px;
+            margin-left: 5px;
+            font-size: 17px;
+        }
+
+        .decrement {
+            color: #fff !important;
+            background-color: #dc3545;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 5px;
+            font-size: 17px;
+        }
+
+        .alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+    </style>
+}
+
+<!-- Notefication -->
+@if (TempData["Clear"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="container">
+            <strong>@TempData["Clear"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start Breadcrumb -->
+<div class="breadcrumb">
+    <div class="container d-flex">
+        <li>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <i class="fas fa-angle-right"></i>
+        <li>
+            <a asp-controller="Order" asp-action="Cart">Your Cart</a>
+        </li>
+
+    </div>
+</div>
+<!-- End Breadcrumb -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------------------ -->
+<!-- Start Cart -->
+<div class="cart container mt-5">
+
+    <!-- Start Table -->
+    <div class="table-responsive-lg mb-2">
+        <table class="table table-hover text-center">
+            <thead>
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quntity</th>
+                    <th scope="col">Subtotal</th>
+                    <th scope="col">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null)
+                {
+                    <!-- If Cart is Empty -->
+                    <tr>
+                        <td colspan="6">There are no products to display in the card</td>
+                    </tr>
+                    <!-- If Cart is Empty -->
+                }
+                else
+                {
+                    @foreach (var item in Model.lstItems)
+                    {
+                        <tr>
+                            <td><a asp-controller="Item" asp-action="SingleItem" asp-route-id="@item.ItemId"><img src="@string.Format("/Uploads/{0}", item.ImageName)" alt=""></a></td>
+                            <td class="name">@item.ItemName</td>
+                            <td class="price">@item.Price.ToString("C2")</td>
+                            <td class="qty">
+                                <a asp-controller="Order" asp-action="Decrement" asp-route-Id="@item.ItemId" class="decrement">-</a>
+                                <span>@item.Qty</span>
+                                <a asp-controller="Order" asp-action="Increment" asp-route-Id="@item.ItemId" class="increment">+</a>
+                            </td>
+                            <td class="subtotal">@item.Total.ToString("C2")</td>
+                            <td class="remove">
+                                <a asp-controller="Order" asp-action="RemoveItem" asp-route-id="@item.ItemId">
+                                    <i class='bx bx-trash'></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <!-- End Table -->
+    <!-- Start buttons -->
+    <div class="buttons mt-3">
+
+        @if (Model != null)
+        {
+            <div class="info d-flex align-items-center">
+                <div class="left">
+                    <a>Total: <span id="total">@Model.total.ToString("C2")</span></a>
+                </div>
+                <div class="right ml-auto">
+                    <a asp-controller="Order" asp-action="RemoveAll" class="clear ml-auto">
+                        <i class="far fa-times-circle"></i> Clear Cart
+                    </a>
+                </div>
+            </div>
+        }
+
+
+        <div class="proccess mt-5 d-flex align-items-center">
+            <div class="left">
+                <a asp-controller="Home" asp-action="Index" class="mr-3"><i class="fas fa-long-arrow-alt-left mr-2"></i> Continue Shopping</a>
+            </div>
+            <div class="right ml-auto">
+                <a asp-controller="Checkout" asp-action="Index">Proceed To CheckOut <i class="fas fa-sign-out-alt ml-2"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- End buttons -->
+
+</div>
+<!-- End Cart -->
+<!-- ------------------------------------------------------------------------------ -->

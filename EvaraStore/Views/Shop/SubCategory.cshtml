@@ -1,0 +1,187 @@
+﻿@model ListItemModel
+
+@{
+    int number = Convert.ToInt32(ViewData["itemsCount"]);
+}
+
+@section Styles {
+    <link href="~/css/shop.css" rel="stylesheet" />
+    <link href="~/vendor/ion.rangeSlider-master/css/ion.rangeSlider.css" rel="stylesheet" />
+    <style>
+        .ajaxbg {
+            background: rgba(255,255,255,0.8) !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 22 !important;
+            border-radius: 50px;
+        }
+
+            .ajaxbg img {
+                position: absolute !important;
+                top: 29% !important;
+                left: 50% !important;
+                width: 80px !important;
+                height: 80px !important;
+                transform: translateX(-50%) !important;
+                z-index: 23 !important;
+            }
+
+            .ajaxbg p {
+                position: absolute;
+                top: 29%;
+                left: 0;
+                width: 100% !important;
+                z-index: 23;
+            }
+
+        .pagination .page-item .page-link {
+            color: #088178 !important;
+        }
+
+        .pagination .active .page-link {
+            background-color: #088178 !important;
+            color: #fff !important;
+        }
+    </style>
+}
+
+<div class="shop pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+
+            <!-- Start Left -->
+            <div class="col-lg-9 mb-lg-0 mb-4">
+                <div class="left">
+                    <!-- Start Header -->
+                    <div class="header d-flex align-content-center">
+                        <div class="title text-left d-flex align-items-center">
+                            We found <strong class="ml-1 mr-1">@number</strong> items for you!
+                        </div>
+                        <div class="button text-right ml-auto">
+                            <img src="~/images/sort.png" alt="">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="false">
+                                    Sort by: Featured
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <a class="dropdown-item" asp-controller="Shop" asp-action="SubCategory" asp-route-sort="price_asc">Price: Low to Heigh</a>
+                                    <a class="dropdown-item" asp-controller="Shop" asp-action="SubCategory" asp-route-sort="price_dsc">Price: Heigh to Low</a>
+                                    <a class="dropdown-item" asp-controller="Shop" asp-action="SubCategory" asp-route-sort="date_asc">Date: Old to New</a>
+                                    <a class="dropdown-item" asp-controller="Shop" asp-action="SubCategory" asp-route-sort="date_dsc">Date: New to Old</a>
+                                    <button class="dropdown-item" type="button">Rating: Low to Heigh</button>
+                                    <button class="dropdown-item" type="button">Rating: Heigh to Low</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Header -->
+                    <!-- Start Items -->
+                    <div class="items new-added">
+                        <div class="row">
+                            @foreach (var item in Model.lstItems)
+                            {
+                                <div class="col-lg-4 col-md-6 col-12 mb-4">
+                                    <partial name="_Item" model="item" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- End Items -->
+                    <!-- Start Pagination -->
+                    <div class="m-auto d-flex justify-content-center">
+                        <cs-pager cs-paging-pagenumber="(int)Model.lstPageResult.pageNumber"
+                                  cs-paging-totalitems="number"
+                                  cs-paging-pagesize="(int)Model.lstPageResult.pageSize"
+                                  cs-pagenumber-param="pagenumber"
+                                  cs-pager-li-current-class="page-item active"
+                                  cs-pager-li-other-class="page-item"
+                                  cs-pager-li-non-active-class="page-item disabled"
+                                  cs-pager-link-current-class="page-link"
+                                  cs-pager-link-other-class="page-link"
+                                  asp-controller="Shop"
+                                  asp-action="SubCategory"></cs-pager>
+                    </div>
+                    <!-- ENd Pagination -->
+
+                </div>
+            </div>
+            <!-- End Left -->
+            <!-- Start Right -->
+            <div class="col-lg-3">
+                <div class="right">
+
+                    <!-- Start Category -->
+                    <div class="list-box category mb-3">
+                        <div class="title">Category</div>
+                        <ul>
+                            @foreach (var cat in Model.lstCategories)
+                            {
+                                <li>
+                                    <div class="category">
+                                        <a asp-controller="Shop" asp-action="Category" asp-route-id="@cat.CategoryName">@cat.CategoryName</a>
+                                        <svg class="svg-inline--fa fa-plus fa-w-14 ml-auto" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg><!-- <i class="fas fa-plus ml-auto"></i> Font Awesome fontawesome.com -->
+                                    </div>
+                                    <div class="sub-category">
+                                        @foreach (var sub in Model.lstSubCategories.Where(a => a.CategoryId == cat.CategoryId))
+                                        {
+                                            <a asp-controller="Shop" asp-action="SubCategory" asp-route-id="@cat.CategoryName--@sub.SubCategoryName">@sub.SubCategoryName</a>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- End Category -->
+                    <!-- Start Banar -->
+                    <div class="banar">
+                        <img src="~/images/banars/banner-11.jpg" alt="">
+                        <div class="info">
+                            <div>
+                                <p>Women Zone</p>
+                                <h4>Save 17% on Office Dress</h4>
+                                <a href="#">Shop Now <svg class="svg-inline--fa fa-long-arrow-alt-right fa-w-14 ml-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="long-arrow-alt-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"></path></svg><!-- <i class="fas fa-long-arrow-alt-right ml-1"></i> Font Awesome fontawesome.com --></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Banar -->
+
+                </div>
+            </div>
+            <!-- End Right -->
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/vendor/ion.rangeSlider-master/js/ion.rangeSlider.js"></script>
+
+    <script>
+        $(function () {
+            $("a.cart").click(function (e) {
+                e.preventDefault();
+
+                let id = $(this).data("id");
+                let ajaxDiv = $(this).parent().parent().find("div.ajaxbg");
+                ajaxDiv.removeClass("d-none");
+
+                $.get('/Item/AddToCart/' + id, {}, function (data) {
+                    $(".cart-bag").html(data);
+                    ajaxDiv.find("img").addClass("d-none");
+                    ajaxDiv.find("p").removeClass("d-none");
+                    setTimeout(() => {
+                        ajaxDiv.animate({ opacity: 0 }, function () {
+                            $(this).addClass("d-none").fadeTo(.1, 1);
+                            $(this).find("img").removeClass("d-none");
+                            $(this).find("p").addClass("d-none");
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+}
