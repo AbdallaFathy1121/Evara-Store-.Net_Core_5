@@ -9,7 +9,7 @@
   - Login
   - Register
   - Profile => show Orders and Track and Edit Information
- ------
+ --
  > Admin
   - Add, Edit, Delete Products
   - Manage Categories and SubCategories
