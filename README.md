@@ -6,6 +6,7 @@
   - Manage Cart (Add - delete - incremet - decrement) products
   - Checkout
   - Show Invoice items
+  - Billing Details
   - Login
   - Register
   - Profile => show Orders and Track and Edit Information
